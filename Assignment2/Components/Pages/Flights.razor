@@ -1,0 +1,15 @@
+﻿@page "/flights"
+@using System
+@using Assignment2.Data
+
+<div class="d-flex justify-content-center">
+    <h3>Flight Finder</h3>
+</div>
+@foreach (var flight in flightData)
+{
+    <p>raw flight data @flight</p>
+}
+
+@code {
+    private string[] flightData = Assignment2.Properties.Resources.flights.Split('\n');
+}
