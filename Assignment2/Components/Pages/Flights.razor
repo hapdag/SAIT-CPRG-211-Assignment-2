@@ -11,7 +11,7 @@
 <input placeholder="Any" @bind="to"/>
 <label>Day:</label>
 <input placeholder="Any" @bind="day"/>
-<button @onclick="FindFlights">Find flights</button>
+<button class="btn-primary" @onclick="FindFlights">Find flights</button>
 <br />
 <div class="d-flex justify-content-center">
     <h3>Flights</h3>
@@ -20,7 +20,7 @@
 {
     <table>
         <tr>
-            <td @onclick="() => OnButtonClick(flight)"> @flight.FlightNumber @flight.Airline @flight.Departure @flight.Arrival @flight.FlightDay @flight.FlightTime @flight.Seats </td>
+            <td @onclick="() => SelectFlight(flight)"> @foundFlights.Count @flight.FlightNumber @flight.Airline @flight.Departure @flight.Arrival @flight.FlightDay @flight.FlightTime @flight.Seats </td>
         </tr>
     </table>
 }
@@ -30,30 +30,59 @@
 </div>
 <div class="d-flex flex-column">
     <label>Flight code:</label>
-    <input placeholder="Any" @bind="foundFlightCode" />
+    <input placeholder="Flight" @bind="foundFlightCode" />
     <label>Airline:</label>
-    <input placeholder="Any" @bind="foundFlightAirline" />
+    <input placeholder="Airline" @bind="foundFlightAirline" />
     <label>Day:</label>
-    <input placeholder="Any" @bind="foundFlightDay" />
+    <input placeholder="Day" @bind="foundFlightDay" />
+    <label>Time:</label>
+    <input placeholder="Time" @bind="foundFlightTime" />
+    <label>Cost:</label>
+    <input placeholder="0" @bind="foundFlightCost" />
+    <label>Name:</label>
+    <input placeholder="Name" @bind="reservationName" />
+    <label>Citizenship:</label>
+    <input placeholder="Citizenship" @bind="reservationCitizenship" />
+</div>
+<br />
+<div class="d-flex flex-column align-items-center">
+    <button class="btn-primary" @onclick="ReserveFlight">Reserve</button>
+    <p>Reservation Code: </p>
 </div>
 
-
 @code {
-    public string from, to, day, foundFlightCode, foundFlightAirline, foundFlightDay;
+    public string from, to, day, foundFlightCode, foundFlightAirline, foundFlightDay, foundFlightTime, reservationName, reservationCitizenship;
+    public double foundFlightCost;
     public string[] flightData = Assignment2.Properties.Resources.flights.Split('\n');
     public List<Flight> flights = new List<Flight>(), foundFlights = new List<Flight>();
-    public void OnButtonClick(Flight flight)
+    public Flight selectedFlight;
+    public void ReserveFlight()
+    {
+
+    }
+    public void PopulateFlights()
+    {
+        flights.Clear();
+        foreach (var flight in flightData)
+        {
+            string[] flightInfo = flight.Split(',');
+            flights.Add(new Flight(flightInfo[0], flightInfo[1], flightInfo[2], flightInfo[3], flightInfo[4], flightInfo[5], int.Parse(flightInfo[6]), double.Parse(flightInfo[7].Trim())));
+        }
+    }
+
+    public void SelectFlight(Flight flight)
     {
         foundFlightCode = flight.FlightNumber;
+        foundFlightAirline = flight.Airline;
+        foundFlightDay = flight.FlightDay;
+        foundFlightTime = flight.FlightTime;
+        foundFlightCost = flight.TicketCost;
+        selectedFlight = flight;
     }
 
     public void FindFlights()
     {
-        foreach (var flight in flightData)
-        {
-            string[] flightInfo = flight.Split(',');
-            flights.Add(new Flight(flightInfo[0], flightInfo[1], flightInfo[2], flightInfo[3], flightInfo[4], flightInfo[5], int.Parse(flightInfo[6]), double.Parse(flightInfo[7].Trim())) );
-        }
+        foundFlights.Clear();
         if (!string.IsNullOrWhiteSpace(from) & !string.IsNullOrWhiteSpace(to) & !string.IsNullOrWhiteSpace(from))
         {
             foreach (Flight flight in flights)
@@ -65,4 +94,10 @@
             }
         }
     }
+
+    protected override void OnAfterRender(bool firstRender)
+    {
+        PopulateFlights();
+    }
+
 }
