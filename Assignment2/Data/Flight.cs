@@ -6,7 +6,7 @@ using System.Threading.Tasks;
 
 namespace Assignment2.Data
 {
-    internal class Flight
+    public class Flight
     {
         private string _flightNumber;
         private string _airline;

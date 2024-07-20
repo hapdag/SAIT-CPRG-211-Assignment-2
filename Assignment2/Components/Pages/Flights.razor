@@ -5,11 +5,64 @@
 <div class="d-flex justify-content-center">
     <h3>Flight Finder</h3>
 </div>
-@foreach (var flight in flightData)
+<label>From:</label>
+<input placeholder="Any" @bind="from" />
+<label>To:</label>
+<input placeholder="Any" @bind="to"/>
+<label>Day:</label>
+<input placeholder="Any" @bind="day"/>
+<button @onclick="FindFlights">Find flights</button>
+<br />
+<div class="d-flex justify-content-center">
+    <h3>Flights</h3>
+</div>
+@foreach(Flight flight in foundFlights)
 {
-    <p>raw flight data @flight</p>
+    <table>
+        <tr>
+            <td @onclick="() => OnButtonClick(flight)"> @flight.FlightNumber @flight.Airline @flight.Departure @flight.Arrival @flight.FlightDay @flight.FlightTime @flight.Seats </td>
+        </tr>
+    </table>
 }
+<br />
+<div class="d-flex justify-content-center">
+    <h3>Reserve</h3>
+</div>
+<div class="d-flex flex-column">
+    <label>Flight code:</label>
+    <input placeholder="Any" @bind="foundFlightCode" />
+    <label>Airline:</label>
+    <input placeholder="Any" @bind="foundFlightAirline" />
+    <label>Day:</label>
+    <input placeholder="Any" @bind="foundFlightDay" />
+</div>
+
 
 @code {
-    private string[] flightData = Assignment2.Properties.Resources.flights.Split('\n');
+    public string from, to, day, foundFlightCode, foundFlightAirline, foundFlightDay;
+    public string[] flightData = Assignment2.Properties.Resources.flights.Split('\n');
+    public List<Flight> flights = new List<Flight>(), foundFlights = new List<Flight>();
+    public void OnButtonClick(Flight flight)
+    {
+        foundFlightCode = flight.FlightNumber;
+    }
+
+    public void FindFlights()
+    {
+        foreach (var flight in flightData)
+        {
+            string[] flightInfo = flight.Split(',');
+            flights.Add(new Flight(flightInfo[0], flightInfo[1], flightInfo[2], flightInfo[3], flightInfo[4], flightInfo[5], int.Parse(flightInfo[6]), double.Parse(flightInfo[7].Trim())) );
+        }
+        if (!string.IsNullOrWhiteSpace(from) & !string.IsNullOrWhiteSpace(to) & !string.IsNullOrWhiteSpace(from))
+        {
+            foreach (Flight flight in flights)
+            {
+                if (String.Equals(flight.Departure,from,StringComparison.OrdinalIgnoreCase) & String.Equals(flight.Arrival,to, StringComparison.OrdinalIgnoreCase) & String.Equals(flight.FlightDay,day,StringComparison.OrdinalIgnoreCase))
+                {
+                    foundFlights.Add(flight);
+                }
+            }
+        }
+    }
 }
