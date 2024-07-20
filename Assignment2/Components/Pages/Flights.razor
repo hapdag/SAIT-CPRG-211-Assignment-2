@@ -16,29 +16,30 @@
 <div class="d-flex justify-content-center">
     <h3>Flights</h3>
 </div>
-@foreach(Flight flight in foundFlights)
-{
+
     <table>
+    @foreach (Flight flight in foundFlights)
+    {
         <tr>
-            <td @onclick="() => SelectFlight(flight)"> @foundFlights.Count @flight.FlightNumber @flight.Airline @flight.Departure @flight.Arrival @flight.FlightDay @flight.FlightTime @flight.Seats </td>
+            <td @onclick="() => SelectFlight(flight)"> @flight.FlightNumber @flight.Airline @flight.Departure @flight.Arrival @flight.FlightDay @flight.FlightTime @flight.Seats </td>
         </tr>
+    }
     </table>
-}
 <br />
 <div class="d-flex justify-content-center">
     <h3>Reserve</h3>
 </div>
 <div class="d-flex flex-column">
     <label>Flight code:</label>
-    <input placeholder="Flight" @bind="foundFlightCode" />
+    <input placeholder="Flight" @bind="foundFlightCode" disabled/>
     <label>Airline:</label>
-    <input placeholder="Airline" @bind="foundFlightAirline" />
+    <input placeholder="Airline" @bind="foundFlightAirline" disabled/>
     <label>Day:</label>
-    <input placeholder="Day" @bind="foundFlightDay" />
+    <input placeholder="Day" @bind="foundFlightDay" disabled/>
     <label>Time:</label>
-    <input placeholder="Time" @bind="foundFlightTime" />
+    <input placeholder="Time" @bind="foundFlightTime" disabled/>
     <label>Cost:</label>
-    <input placeholder="0" @bind="foundFlightCost" />
+    <input placeholder="0" @bind="foundFlightCost" disabled/>
     <label>Name:</label>
     <input placeholder="Name" @bind="reservationName" />
     <label>Citizenship:</label>
@@ -58,7 +59,14 @@
     public Flight selectedFlight;
     public void ReserveFlight()
     {
+        if (!string.IsNullOrWhiteSpace(from) & !string.IsNullOrWhiteSpace(to))
+        {
 
+        }
+        else
+        {
+            throw new Exception();
+        }
     }
     public void PopulateFlights()
     {
