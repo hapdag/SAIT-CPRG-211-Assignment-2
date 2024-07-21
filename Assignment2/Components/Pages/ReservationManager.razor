@@ -15,10 +15,11 @@
 <div class="d-flex justify-content-center">
     <h3>Reservations</h3>
 </div>
-@if(foundRes != null)
+@foreach (var res in filteredReservs)
 {
-    <p>@foundRes.ReservationCode</p>
+    <p> @res.ReservationCode @res.ReservedFlight.Airline @res.ClientName</p>
 }
+
 <br />
 <div class="d-flex justify-content-center">
     <h3>Reserve</h3>
@@ -43,21 +44,21 @@
 @code {
     private string? reservationName, reservationAirline, reservationCode, foundResCode, foundResFlightCode,foundResAirline,foundResCost,foundResName,foundResCitizenship,foundResStatus;
     private List<Reservation> foundReservs = new List<Reservation>();
+    private IEnumerable<Reservation> filteredReservs = new List<Reservation>();
     private Reservation? foundRes;
 
     private void FindReservation()
     {
-        if (!string.IsNullOrEmpty(reservationCode))
-        {
-            foreach(var res in FindFlightRes.reservations)
-            {
-                if(string.Equals(res.ReservationCode, reservationCode, StringComparison.OrdinalIgnoreCase))
-                {
-                    foundRes = res;
-                }
-            }
-            
-        }
+        //        if(reservationCode != n<!ull & reservationAirline != null & reservationName != null)
+        //        {
+        //            var filteredReservs = FindFlightRes.reservations.Where(res => string.Equals(res.ReservationCode, reservationCode, StringComparison.OrdinalIgnoreCase) & string.Equals(res.ReservedFlight.Airline, reservationAirline, StringComparison.OrdinalIgnoreCase) & string.Equals(res.ClientName, reservationName, StringComparison.OrdinalIgnoreCase));
+        //        }
+
+        filteredReservs = FindFlightRes.reservations.Where(res => (!string.IsNullOrEmpty(reservationCode) ? string.Equals(res.ReservationCode, reservationCode.Trim(), StringComparison.OrdinalIgnoreCase) : true))
+                                                    .Where(res => (!string.IsNullOrEmpty(reservationAirline) ? string.Equals(res.ReservedFlight.Airline, reservationAirline.Trim(), StringComparison.OrdinalIgnoreCase) : true))
+                                                    .Where(res => (!string.IsNullOrEmpty(reservationName) ? string.Equals(res.ClientName, reservationName.Trim(), StringComparison.OrdinalIgnoreCase) : true));
+                                                                    
+
     }
     private void SelectReserv(Reservation res)
     {
