@@ -22,7 +22,7 @@ namespace Assignment2.Data
         public string Arrival { get { return _arrival; } }
         public string FlightDay { get { return _flightDay; } }
         public string FlightTime { get { return _flightTime; } }
-        public int Seats {  get { return _seats; } }
+        public int Seats { get { return _seats; } set { _seats = value; } }
         public double TicketCost {  get { return _ticketCost; } }
 
         public Flight( string flightNumber, string airline, string departure, string arrival, string flightDay, string flightTime, int seats, double ticketCost)

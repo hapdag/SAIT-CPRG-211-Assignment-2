@@ -1,111 +1,22 @@
 ﻿@page "/flights"
-@using System
-@using Assignment2.Data
 
-<div class="d-flex justify-content-center">
-    <h3>Flight Finder</h3>
-</div>
-<label>From:</label>
-<input placeholder="Any" @bind="from" />
-<label>To:</label>
-<input placeholder="Any" @bind="to"/>
-<label>Day:</label>
-<input placeholder="Any" @bind="day"/>
-<button class="btn-primary" @onclick="FindFlights">Find flights</button>
-<br />
-<div class="d-flex justify-content-center">
-    <h3>Flights</h3>
-</div>
-
-    <table>
-    @foreach (Flight flight in foundFlights)
-    {
-        <tr>
-            <td @onclick="() => SelectFlight(flight)"> @flight.FlightNumber @flight.Airline @flight.Departure @flight.Arrival @flight.FlightDay @flight.FlightTime @flight.Seats </td>
-        </tr>
-    }
-    </table>
-<br />
-<div class="d-flex justify-content-center">
-    <h3>Reserve</h3>
-</div>
-<div class="d-flex flex-column">
-    <label>Flight code:</label>
-    <input placeholder="Flight" @bind="foundFlightCode" disabled/>
-    <label>Airline:</label>
-    <input placeholder="Airline" @bind="foundFlightAirline" disabled/>
-    <label>Day:</label>
-    <input placeholder="Day" @bind="foundFlightDay" disabled/>
-    <label>Time:</label>
-    <input placeholder="Time" @bind="foundFlightTime" disabled/>
-    <label>Cost:</label>
-    <input placeholder="0" @bind="foundFlightCost" disabled/>
-    <label>Name:</label>
-    <input placeholder="Name" @bind="reservationName" />
-    <label>Citizenship:</label>
-    <input placeholder="Citizenship" @bind="reservationCitizenship" />
-</div>
-<br />
-<div class="d-flex flex-column align-items-center">
-    <button class="btn-primary" @onclick="ReserveFlight">Reserve</button>
-    <p>Reservation Code: </p>
-</div>
+<ErrorBoundary @ref="errorBoundary">
+    <ChildContent>
+        <FindFlightRes/>
+    </ChildContent>
+    <ErrorContent>
+        <div class="alert alert-warning" role="alert">
+            Error with creating reservation. <br />
+            Either missing client info or no valid flights were selected. Refresh the page to try again.
+        </div>
+    </ErrorContent>
+</ErrorBoundary>
 
 @code {
-    public string from, to, day, foundFlightCode, foundFlightAirline, foundFlightDay, foundFlightTime, reservationName, reservationCitizenship;
-    public double foundFlightCost;
-    public string[] flightData = Assignment2.Properties.Resources.flights.Split('\n');
-    public List<Flight> flights = new List<Flight>(), foundFlights = new List<Flight>();
-    public Flight selectedFlight;
-    public void ReserveFlight()
-    {
-        if (!string.IsNullOrWhiteSpace(from) & !string.IsNullOrWhiteSpace(to))
-        {
+    private ErrorBoundary? errorBoundary;
 
-        }
-        else
-        {
-            throw new Exception();
-        }
-    }
-    public void PopulateFlights()
+    protected override void OnParametersSet()
     {
-        flights.Clear();
-        foreach (var flight in flightData)
-        {
-            string[] flightInfo = flight.Split(',');
-            flights.Add(new Flight(flightInfo[0], flightInfo[1], flightInfo[2], flightInfo[3], flightInfo[4], flightInfo[5], int.Parse(flightInfo[6]), double.Parse(flightInfo[7].Trim())));
-        }
+        errorBoundary?.Recover();
     }
-
-    public void SelectFlight(Flight flight)
-    {
-        foundFlightCode = flight.FlightNumber;
-        foundFlightAirline = flight.Airline;
-        foundFlightDay = flight.FlightDay;
-        foundFlightTime = flight.FlightTime;
-        foundFlightCost = flight.TicketCost;
-        selectedFlight = flight;
-    }
-
-    public void FindFlights()
-    {
-        foundFlights.Clear();
-        if (!string.IsNullOrWhiteSpace(from) & !string.IsNullOrWhiteSpace(to) & !string.IsNullOrWhiteSpace(from))
-        {
-            foreach (Flight flight in flights)
-            {
-                if (String.Equals(flight.Departure,from,StringComparison.OrdinalIgnoreCase) & String.Equals(flight.Arrival,to, StringComparison.OrdinalIgnoreCase) & String.Equals(flight.FlightDay,day,StringComparison.OrdinalIgnoreCase))
-                {
-                    foundFlights.Add(flight);
-                }
-            }
-        }
-    }
-
-    protected override void OnAfterRender(bool firstRender)
-    {
-        PopulateFlights();
-    }
-
 }
