@@ -1,0 +1,24 @@
+﻿@page "/ReservationManager"
+@using System
+@using Assignment2.Data
+<div class="d-flex justify-content-center">
+    <h3>Reservation Finder</h3>
+</div>
+<label>Code:</label>
+<input placeholder="Any" @bind="reservationCode" />
+<label>Airline:</label>
+<input placeholder="Any" @bind="reservationAirline" />
+<label>Name:</label>
+<input placeholder="Any" @bind="reservationName" />
+<button class="btn-primary" @onclick="FindReservation">Find Reservations</button>
+<br />
+
+@code {
+    private string reservationName, reservationAirline, reservationCode;
+
+    private void FindReservation()
+    {
+
+    }
+
+}
