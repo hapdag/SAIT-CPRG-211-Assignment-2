@@ -12,10 +12,12 @@ namespace Assignment2.Data
         private string _clientName;
         private string _clientCitizenship;
         private string _reservationCode;
+        private bool _reservationStatus;
         public Flight ReservedFlight { get { return _reservedFlight; } }
         public string ClientName { get { return _clientName; } }
         public string ClientCitizenship { get { return _clientCitizenship; } }
         public string ReservationCode { get { return _reservationCode; } }
+        public bool ReservationStatus { get { return _reservationStatus; } }
         public Reservation(Flight flight, string clientName, string clientCitizenship)
         {
             string letters = "ABCDEFGHIJKLMNOPQRSTUVWXYZ";
@@ -33,7 +35,13 @@ namespace Assignment2.Data
             _reservedFlight = flight;
             _clientName = clientName;
             _clientCitizenship = clientCitizenship;
+            _reservationStatus = true;
+        }
 
+        public void SetInactive()
+        {
+            _reservationStatus = false;
+            _reservedFlight.Seats += 1;
         }
     }
 }
