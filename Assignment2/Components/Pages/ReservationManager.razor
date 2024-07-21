@@ -12,13 +12,49 @@
 <input placeholder="Any" @bind="reservationName" />
 <button class="btn-primary" @onclick="FindReservation">Find Reservations</button>
 <br />
+<div class="d-flex justify-content-center">
+    <h3>Reservations</h3>
+</div>
+@foreach (Reservation res in foundReservs)
+{
+    <table>
+        <tr>
+            <td @onclick="() => SelectReserv(res)"> @res </td>
+        </tr>
+    </table>
+}
+<br />
+<div class="d-flex justify-content-center">
+    <h3>Reserve</h3>
+</div>
+<div class="d-flex flex-column">
+    <label>Reservation code:</label>
+    <input placeholder="Reservation code" @bind="foundResCode" disabled/>
+    <label>Flight code:</label>
+    <input placeholder="Flight" @bind="foundResFlightCode" disabled/>
+    <label>Airline:</label>
+    <input placeholder="Airline" @bind="foundResAirline" disabled/>
+    <label>Cost:</label>
+    <input placeholder="Cost" @bind="foundResCost" disabled/>
+    <label>Name:</label>
+    <input placeholder="Name" @bind="foundResName"/>
+    <label>Citizenship:</label>
+    <input placeholder="Citizenship" @bind="foundResCitizenship"/>
+    <label>Status:</label>
+    <input placeholder="Status" @bind="foundResStatus"/>
+</div>
 
 @code {
-    private string reservationName, reservationAirline, reservationCode;
+    private string? reservationName, reservationAirline, reservationCode, foundResCode, foundResFlightCode,foundResAirline,foundResCost,foundResName,foundResCitizenship,foundResStatus;
+    private List<Reservation> foundReservs = new List<Reservation>();
 
     private void FindReservation()
     {
 
+    }
+    private void SelectReserv(Reservation res)
+    {
+        
     }
 
 }
