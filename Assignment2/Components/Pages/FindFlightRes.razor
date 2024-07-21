@@ -66,7 +66,7 @@
     public double foundFlightCost;
     public string[] flightData = Assignment2.Properties.Resources.flights.Split('\n');
     public List<Flight> flights = new List<Flight>(), foundFlights = new List<Flight>();
-    public List<Reservation> reservations = new List<Reservation>();
+    public static List<Reservation> reservations = new List<Reservation>();
     public Flight? selectedFlight;
 
     public void MakeReservation(Flight selectedFlight, string clientName, string clientCitizenship)
@@ -130,6 +130,14 @@
     protected override void OnAfterRender(bool firstRender)
     {
         PopulateFlights();
+    }
+
+    private async Task Save()
+    {
+        var contents = JsonSerializer.Serialize(reservations);
+        var path = Path.Combine(FileSystem.AppDataDirectory, "Reservations.json");
+        File.WriteAllText(path, contents);
+        await App.Current.MainPage.DisplayAlert("List Saved", $"List has been saved to {path}", "OK");
     }
 
 }

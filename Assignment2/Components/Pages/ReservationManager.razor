@@ -15,13 +15,9 @@
 <div class="d-flex justify-content-center">
     <h3>Reservations</h3>
 </div>
-@foreach (Reservation res in foundReservs)
+@if(foundRes != null)
 {
-    <table>
-        <tr>
-            <td @onclick="() => SelectReserv(res)"> @res </td>
-        </tr>
-    </table>
+    <p>@foundRes.ReservationCode</p>
 }
 <br />
 <div class="d-flex justify-content-center">
@@ -47,10 +43,21 @@
 @code {
     private string? reservationName, reservationAirline, reservationCode, foundResCode, foundResFlightCode,foundResAirline,foundResCost,foundResName,foundResCitizenship,foundResStatus;
     private List<Reservation> foundReservs = new List<Reservation>();
+    private Reservation? foundRes;
 
     private void FindReservation()
     {
-
+        if (!string.IsNullOrEmpty(reservationCode))
+        {
+            foreach(var res in FindFlightRes.reservations)
+            {
+                if(string.Equals(res.ReservationCode, reservationCode, StringComparison.OrdinalIgnoreCase))
+                {
+                    foundRes = res;
+                }
+            }
+            
+        }
     }
     private void SelectReserv(Reservation res)
     {
