@@ -52,7 +52,7 @@
     <button class="btn-primary" @onclick="ReserveFlight">Reserve</button>
     <p>Reservation Code: @if (reservations.Count > 0)
         {
-            <p>@reservations[0].ReservedFlight.FlightNumber</p>
+            @reservations.Last().ReservationCode;
         }</p>
 </div>
 

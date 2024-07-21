@@ -18,17 +18,22 @@ namespace Assignment2.Data
         public string ReservationCode { get { return _reservationCode; } }
         public Reservation(Flight flight, string clientName, string clientCitizenship)
         {
-            if(flight.Seats > 0)
+            string letters = "ABCDEFGHIJKLMNOPQRSTUVWXYZ";
+            List<string> code = new List<string>();
+            Random rnd = new Random();
+            int rndNum = rnd.Next(26);
+            code.Add(letters[rndNum].ToString());
+            for (int i = 0; i<4; i++)
             {
-                flight.Seats -= 1;
-                _reservedFlight = flight;
-                _clientName = clientName;
-                _clientCitizenship = clientCitizenship;
+                rndNum = rnd.Next(9);
+                code.Add(rndNum.ToString());
             }
-            else
-            {
-                throw new Exception();
-            }
+            _reservationCode = String.Join("", code);
+            flight.Seats -= 1;
+            _reservedFlight = flight;
+            _clientName = clientName;
+            _clientCitizenship = clientCitizenship;
+
         }
     }
 }
