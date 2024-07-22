@@ -38,10 +38,46 @@ namespace Assignment2.Data
             _reservationStatus = true;
         }
 
-        public void SetInactive()
+        public void UpdateStatus(string status)
         {
-            _reservationStatus = false;
-            _reservedFlight.Seats += 1;
+            if (string.IsNullOrEmpty(status))
+            {
+                throw new ArgumentException();
+            }
+            else if (string.Equals(status, "Active", StringComparison.OrdinalIgnoreCase))
+            {
+                _reservationStatus = true;
+                _reservedFlight.Seats -= 1;
+            }
+            else
+            {
+                _reservationStatus = false;
+                _reservedFlight.Seats += 1;
+            }
         }
+
+        public void UpdateClientName(string clientName)
+        {
+            if (string.IsNullOrEmpty(clientName))
+            {
+                throw new ArgumentException();
+            }
+            else
+            {
+                _clientName = clientName;
+            }
+        }
+        public void UpdateClientCitizenship(string clientCitizenship)
+        {
+            if (string.IsNullOrEmpty(clientCitizenship))
+            {
+                throw new ArgumentException();
+            }
+            else
+            {
+                _clientCitizenship = clientCitizenship;
+            }
+        }
+
     }
 }

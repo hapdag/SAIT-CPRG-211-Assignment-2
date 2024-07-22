@@ -1,13 +1,12 @@
 ﻿@page "/reservationsPage"
-
 <ErrorBoundary @ref="errorBoundary">
     <ChildContent>
         <ReservationManager />
     </ChildContent>
     <ErrorContent>
         <div class="alert alert-warning" role="alert">
-            Error with creating reservation. <br />
-            Either missing client info or no valid flights were selected. Refresh the page to try again.
+            Error with updating reservation. <br />
+            No valid reservation was selected for updates. Refresh the page to try again.
         </div>
     </ErrorContent>
 </ErrorBoundary>

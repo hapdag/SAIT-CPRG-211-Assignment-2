@@ -68,7 +68,6 @@
     public List<Flight> flights = new List<Flight>(), foundFlights = new List<Flight>();
     public static List<Reservation> reservations = new List<Reservation>();
     public Flight? selectedFlight;
-
     public void MakeReservation(Flight selectedFlight, string clientName, string clientCitizenship)
     {
         reservations.Add(new Reservation(selectedFlight, clientName, clientCitizenship));
@@ -101,7 +100,6 @@
             flights.Add(new Flight(flightInfo[0], flightInfo[1], flightInfo[2], flightInfo[3], flightInfo[4], flightInfo[5], int.Parse(flightInfo[6]), double.Parse(flightInfo[7].Trim())));
         }
     }
-
     public void SelectFlight(Flight flight)
     {
         foundFlightCode = flight.FlightNumber;
@@ -126,18 +124,8 @@
             }
         }
     }
-
     protected override void OnAfterRender(bool firstRender)
     {
         PopulateFlights();
     }
-
-    private async Task Save()
-    {
-        var contents = JsonSerializer.Serialize(reservations);
-        var path = Path.Combine(FileSystem.AppDataDirectory, "Reservations.json");
-        File.WriteAllText(path, contents);
-        await App.Current.MainPage.DisplayAlert("List Saved", $"List has been saved to {path}", "OK");
-    }
-
 }

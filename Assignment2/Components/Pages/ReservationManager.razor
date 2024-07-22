@@ -17,9 +17,8 @@
 </div>
 @foreach (var res in filteredReservs)
 {
-    <p> @res.ReservationCode @res.ReservedFlight.Airline @res.ClientName</p>
+    <p @onclick="() => SelectReservation(res)"> @res.ReservationCode @res.ClientName @res.ClientCitizenship  @res.ReservedFlight.FlightNumber @res.ReservedFlight.Airline @res.ReservedFlight.FlightTime</p>
 }
-
 <br />
 <div class="d-flex justify-content-center">
     <h3>Reserve</h3>
@@ -40,29 +39,53 @@
     <label>Status:</label>
     <input placeholder="Status" @bind="foundResStatus"/>
 </div>
+<br />
+<div class="d-flex justify-content-center">
+    <button class="btn-primary" @onclick="UpdateReservation">Update</button>
+</div>
+<br />
 
 @code {
-    private string? reservationName, reservationAirline, reservationCode, foundResCode, foundResFlightCode,foundResAirline,foundResCost,foundResName,foundResCitizenship,foundResStatus;
+    private string? reservationName, reservationAirline, reservationCode, foundResCode, foundResFlightCode, foundResAirline, foundResCost,
+        foundResName, foundResCitizenship, foundResStatus;
     private List<Reservation> foundReservs = new List<Reservation>();
     private IEnumerable<Reservation> filteredReservs = new List<Reservation>();
     private Reservation? foundRes;
-
     private void FindReservation()
     {
-        //        if(reservationCode != n<!ull & reservationAirline != null & reservationName != null)
-        //        {
-        //            var filteredReservs = FindFlightRes.reservations.Where(res => string.Equals(res.ReservationCode, reservationCode, StringComparison.OrdinalIgnoreCase) & string.Equals(res.ReservedFlight.Airline, reservationAirline, StringComparison.OrdinalIgnoreCase) & string.Equals(res.ClientName, reservationName, StringComparison.OrdinalIgnoreCase));
-        //        }
-
         filteredReservs = FindFlightRes.reservations.Where(res => (!string.IsNullOrEmpty(reservationCode) ? string.Equals(res.ReservationCode, reservationCode.Trim(), StringComparison.OrdinalIgnoreCase) : true))
-                                                    .Where(res => (!string.IsNullOrEmpty(reservationAirline) ? string.Equals(res.ReservedFlight.Airline, reservationAirline.Trim(), StringComparison.OrdinalIgnoreCase) : true))
-                                                    .Where(res => (!string.IsNullOrEmpty(reservationName) ? string.Equals(res.ClientName, reservationName.Trim(), StringComparison.OrdinalIgnoreCase) : true));
-                                                                    
+                                                       .Where(res => (!string.IsNullOrEmpty(reservationAirline) ? string.Equals(res.ReservedFlight.Airline, reservationAirline.Trim(), StringComparison.OrdinalIgnoreCase) : true))
+                                                       .Where(res => (!string.IsNullOrEmpty(reservationName) ? string.Equals(res.ClientName, reservationName.Trim(), StringComparison.OrdinalIgnoreCase) : true));
+
 
     }
-    private void SelectReserv(Reservation res)
+    private void SelectReservation(Reservation res)
     {
-        
+        foundRes = res;
+        foundResCode = foundRes.ReservationCode;
+        foundResFlightCode = foundRes.ReservedFlight.FlightNumber;
+        foundResAirline = foundRes.ReservedFlight.Airline;
+        foundResCost = foundRes.ReservedFlight.TicketCost.ToString();
+        foundResName = foundRes.ClientName;
+        foundResCitizenship = foundRes.ClientCitizenship;
+        if (foundRes.ReservationStatus is true)
+        {
+            foundResStatus = "Active";
+        }else{
+            foundResStatus = "Inactive";
+        }
     }
-
+    private void UpdateReservation()
+    {
+        try
+        {
+            foundRes.UpdateClientName(foundResName);
+            foundRes.UpdateClientCitizenship(foundResCitizenship);
+            foundRes.UpdateStatus(foundResStatus);
+        }
+        catch (ArgumentException)
+        {
+            App.Current.MainPage.DisplayAlert("Update Error","Reservation data to be updated CANNOT be empty.","OK");
+        }
+    }
 }
