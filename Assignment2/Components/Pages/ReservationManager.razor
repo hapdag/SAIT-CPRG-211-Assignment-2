@@ -82,6 +82,7 @@
             foundRes.UpdateClientName(foundResName);
             foundRes.UpdateClientCitizenship(foundResCitizenship);
             foundRes.UpdateStatus(foundResStatus);
+            FindFlightRes.Save(FindFlightRes.reservations);
         }
         catch (ArgumentException)
         {

@@ -1,5 +1,27 @@
 ﻿@page "/"
+@using Assignment2.Data
+@using Microsoft.Maui.Storage
+@using System.IO
+@using System.Text.Json
 
 <h1>Welcome to Traveless</h1>
 
 Welcome to our new app.
+
+@code{
+    private void Load()
+    {
+        var path = Path.Combine(FileSystem.AppDataDirectory, "reservations.json");
+        if (!File.Exists(path))
+            return;
+        var contents = File.ReadAllText(path);
+        var savedItems = JsonSerializer.Deserialize<List<Reservation>>(contents);
+        FindFlightRes.reservations.Clear();
+        FindFlightRes.reservations.AddRange(savedItems);
+    }
+    
+    protected override void OnAfterRender(bool firstRender)
+    {
+        Load();
+    }
+}

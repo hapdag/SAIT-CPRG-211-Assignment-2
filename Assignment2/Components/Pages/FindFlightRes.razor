@@ -68,6 +68,14 @@
     public List<Flight> flights = new List<Flight>(), foundFlights = new List<Flight>();
     public static List<Reservation> reservations = new List<Reservation>();
     public Flight? selectedFlight;
+
+    public static void Save(List<Reservation> reservations)
+    {
+        var contents = JsonSerializer.Serialize(reservations);
+        var path = Path.Combine(FileSystem.AppDataDirectory, "reservations.json");
+        File.WriteAllText(path, contents);
+    }
+
     public void MakeReservation(Flight selectedFlight, string clientName, string clientCitizenship)
     {
         if (selectedFlight != null)
@@ -75,6 +83,7 @@
             if (!string.IsNullOrWhiteSpace(reservationName) & !string.IsNullOrWhiteSpace(reservationCitizenship) & selectedFlight.Seats > 0)
             {
                 reservations.Add(new Reservation(selectedFlight, clientName, clientCitizenship));
+                Save(reservations);
             }
             else
             {

@@ -2,6 +2,7 @@
 using System.Collections.Generic;
 using System.Linq;
 using System.Text;
+using System.Text.Json.Serialization;
 using System.Threading.Tasks;
 
 namespace Assignment2.Data
@@ -18,7 +19,7 @@ namespace Assignment2.Data
         public string ClientCitizenship { get { return _clientCitizenship; } }
         public string ReservationCode { get { return _reservationCode; } }
         public bool ReservationStatus { get { return _reservationStatus; } }
-        public Reservation(Flight flight, string clientName, string clientCitizenship)
+        public Reservation(Flight reservedFlight, string clientName, string clientCitizenship)
         {
             string letters = "ABCDEFGHIJKLMNOPQRSTUVWXYZ";
             List<string> code = new List<string>();
@@ -31,12 +32,24 @@ namespace Assignment2.Data
                 code.Add(rndNum.ToString());
             }
             _reservationCode = String.Join("", code);
-            flight.Seats -= 1;
-            _reservedFlight = flight;
+            reservedFlight.Seats -= 1;
+            _reservedFlight = reservedFlight;
             _clientName = clientName;
             _clientCitizenship = clientCitizenship;
             _reservationStatus = true;
         }
+
+        [JsonConstructor]
+        public Reservation(Flight ReservedFlight, string ClientName, string ClientCitizenship, string ReservationCode, bool ReservationStatus)
+        {
+            _reservedFlight = ReservedFlight;
+            _clientName= ClientName;
+            _clientCitizenship= ClientCitizenship;
+            _reservationCode = ReservationCode;
+            _reservationStatus= ReservationStatus;
+        }
+
+
 
         public void UpdateStatus(string status)
         {
