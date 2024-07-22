@@ -70,26 +70,38 @@
     public Flight? selectedFlight;
     public void MakeReservation(Flight selectedFlight, string clientName, string clientCitizenship)
     {
-        reservations.Add(new Reservation(selectedFlight, clientName, clientCitizenship));
-    }
-
-    public void ReserveFlight()
-    {
-        if (!string.IsNullOrWhiteSpace(reservationName) & !string.IsNullOrWhiteSpace(reservationCitizenship) & selectedFlight != null)
+        if (selectedFlight != null)
         {
-            if(selectedFlight.Seats>0)
+            if (!string.IsNullOrWhiteSpace(reservationName) & !string.IsNullOrWhiteSpace(reservationCitizenship) & selectedFlight.Seats > 0)
             {
-                MakeReservation(selectedFlight, reservationName, reservationCitizenship);
+                reservations.Add(new Reservation(selectedFlight, clientName, clientCitizenship));
             }
             else
             {
-                throw new Exception();
+                throw new ArgumentException();
             }
         }
         else
         {
-            throw new Exception();
+            throw new ArgumentNullException();
         }
+    }
+
+    public void ReserveFlight()
+    {
+        try
+        {
+            MakeReservation(selectedFlight, reservationName, reservationCitizenship);
+        }
+        catch (ArgumentNullException)
+        {
+            App.Current.MainPage.DisplayAlert("Reservation Error", "No valid flight selected for booking", "OK");
+        }
+        catch (ArgumentException)
+        {
+            App.Current.MainPage.DisplayAlert("Reservation Error", "Invalid name, citizenship, or selected flight have no more seats available", "OK");
+        }
+
     }
     public void PopulateFlights()
     {
